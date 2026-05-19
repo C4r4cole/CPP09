@@ -6,7 +6,7 @@
 /*   By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 14:09:12 by fmoulin           #+#    #+#             */
-/*   Updated: 2026/05/18 17:52:42 by fmoulin          ###   ########.fr       */
+/*   Updated: 2026/05/19 17:20:30 by fmoulin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,60 @@ BitcoinExchange::~BitcoinExchange()
 
 float   BitcoinExchange::findExchangeRate(const std::string &date) const
 {
+    std::map<std::string, float>::const_iterator it = _data.lower_bound(date);
 
+    if (it == _data.end())
+    {
+        --it;
+        return (it->second);
+    }
+    
+    if (it->first != date)
+    {
+        if (it == _data.begin())
+            throw BitcoinExchange::BadInput();
+        --it;
+    }
+    return (it->second);
 }
 
 void    BitcoinExchange::validateDate(const std::string &date) const
 {
+    std::string monthString;
+    int         month;
+    std::string dayString;
+    int         day;
+    size_t      pos;
+    std::string datePartKept;
     
+    if (date.empty())
+        throw BitcoinExchange::BadInput();
+    if (date.size() != 10)
+        throw BitcoinExchange::BadInput();
+    if (date[4] != '-')
+        throw BitcoinExchange::BadInput();
+    if (date[7] != '-')
+        throw BitcoinExchange::BadInput();
+        
+    pos = date.find('-');
+    datePartKept = date.substr(pos + 1);
+    pos = datePartKept.find('-');
+    monthString = datePartKept.substr(0, pos);
+    dayString = datePartKept.substr(pos + 1);
+    month = std::atoi(monthString.c_str());
+    day = std::atoi(dayString.c_str());
+    
+    if (month < 1 || month > 12)
+        throw BitcoinExchange::BadInput();
+    if (day < 1 || day > 31)
+        throw BitcoinExchange::BadInput();
+    for (int i = 0; i < 10; i++)
+    {
+        if (date[i] == '-')
+            continue ;
+        if (!isdigit(date[i]))
+            throw BitcoinExchange::BadInput();
+    }
 }
 
 void    BitcoinExchange::validateValue(const std::string &value) const
