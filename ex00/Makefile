@@ -6,7 +6,7 @@
 #    By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/11 14:02:02 by fmoulin           #+#    #+#              #
-#    Updated: 2026/05/18 14:08:54 by fmoulin          ###   ########.fr        #
+#    Updated: 2026/05/20 15:50:41 by fmoulin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ RM          = rm -f
 #           SOURCES
 # ===========================
 
-SRCS =  main.cpp
+SRCS =  main.cpp BitcoinExchange.cpp
 		
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 

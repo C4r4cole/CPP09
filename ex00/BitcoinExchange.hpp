@@ -6,7 +6,7 @@
 /*   By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 14:09:17 by fmoulin           #+#    #+#             */
-/*   Updated: 2026/05/18 17:35:11 by fmoulin          ###   ########.fr       */
+/*   Updated: 2026/05/20 15:53:40 by fmoulin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <map>
+#include <cstdlib>
 
 class BitcoinExchange
 {

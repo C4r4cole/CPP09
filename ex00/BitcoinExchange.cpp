@@ -6,7 +6,7 @@
 /*   By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 14:09:12 by fmoulin           #+#    #+#             */
-/*   Updated: 2026/05/19 17:20:30 by fmoulin          ###   ########.fr       */
+/*   Updated: 2026/05/20 16:00:12 by fmoulin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ void    BitcoinExchange::validateDate(const std::string &date) const
     pos = datePartKept.find('-');
     monthString = datePartKept.substr(0, pos);
     dayString = datePartKept.substr(pos + 1);
-    month = std::atoi(monthString.c_str());
-    day = std::atoi(dayString.c_str());
+    month = atoi(monthString.c_str());
+    day = atoi(dayString.c_str());
     
     if (month < 1 || month > 12)
         throw BitcoinExchange::BadInput();
@@ -118,7 +118,7 @@ void    BitcoinExchange::validateValue(const std::string &value) const
     if (digitFlag == 0)
         throw BitcoinExchange::BadInput();
         
-    nbr = std::atof(value.c_str());
+    nbr = atof(value.c_str());
     
     if (nbr < 0)
         throw BitcoinExchange::NotAPositiveNumber();
@@ -131,6 +131,9 @@ void    BitcoinExchange::processLine(const std::string &line) const
     size_t          pos;
     std::string     date;
     std::string     valueString;
+	float			value;
+	float			rate;
+	float			result;
     
     try
     {
@@ -141,7 +144,15 @@ void    BitcoinExchange::processLine(const std::string &line) const
         valueString = line.substr(pos + 3);
         validateDate(date);
         validateValue(valueString);
+		value = atof(valueString.c_str());
+		rate = this->findExchangeRate(date);
+		result = value * rate;
+		std::cout << date << " => " << value << " = " << result << std::endl;
     }
+	catch (const BitcoinExchange::BadInput &e)
+	{
+		std::cerr << e.what() << line << std::endl;
+	}
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
@@ -150,7 +161,7 @@ void    BitcoinExchange::processLine(const std::string &line) const
 
 void    BitcoinExchange::loadDatabase(const std::string &filename)
 {
-    std::ifstream   file(filename);
+    std::ifstream   file(filename.c_str());
     std::string     line;
     size_t          pos;
     std::string     date;
@@ -168,14 +179,14 @@ void    BitcoinExchange::loadDatabase(const std::string &filename)
             return ;
         date = line.substr(0, pos);
         rateString = line.substr(pos + 1);
-        rate = std::atof(rateString.c_str());
+        rate = atof(rateString.c_str());
         _data[date] = rate;
     }
 }
 
 void    BitcoinExchange::processInputFile(const std::string &filename)
 {
-    std::ifstream   file(filename);
+    std::ifstream   file(filename.c_str());
     std::string     line;
 
     if (!file)
