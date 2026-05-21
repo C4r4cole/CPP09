@@ -6,7 +6,7 @@
 /*   By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:40:09 by fmoulin           #+#    #+#             */
-/*   Updated: 2026/05/21 10:38:24 by fmoulin          ###   ########.fr       */
+/*   Updated: 2026/05/21 11:30:41 by fmoulin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ void    RPN::calculate(std::string op)
     int right;
     int left;
     
+    if (op != "+" && op != "-" && op != "*" && op != "/")
+        throw std::out_of_range("Error");
+    
     if (_stack.size() >= 2)
     {
         right = _stack.top();
@@ -43,6 +46,9 @@ void    RPN::calculate(std::string op)
         left = _stack.top();
         _stack.pop();
     }
+    else
+        throw std::out_of_range("Error");
+        
     if (op == "+")
     {
         _result = left + right;
@@ -60,6 +66,8 @@ void    RPN::calculate(std::string op)
     }
     if (op == "/")
     {
+        if (right == 0)
+            throw std::out_of_range("Error");
         _result = left / right;
         _stack.push(_result);
     }
@@ -67,6 +75,9 @@ void    RPN::calculate(std::string op)
 
 void RPN::pushOrCalculate(std::string &element)
 {
+    if (element.size() > 1)
+        throw std::out_of_range("Error");
+
     if (isdigit(element[0]))
         _stack.push(atoi(element.c_str()));
     else
@@ -101,11 +112,7 @@ void    RPN::displayResult(void)
 {
     if (_stack.size() == 1)
     {
-        std::cout << _result << std::endl;
-    }
-    else
-    {
-        std::cout << "ERROR!!!" << std::endl;
+        std::cout << _stack.top() << std::endl;
     }
 }
     
