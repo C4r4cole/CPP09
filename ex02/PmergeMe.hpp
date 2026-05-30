@@ -6,7 +6,7 @@
 /*   By: fmoulin <fmoulin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 12:00:32 by fmoulin           #+#    #+#             */
-/*   Updated: 2026/05/29 18:42:05 by fmoulin          ###   ########.fr       */
+/*   Updated: 2026/05/30 18:39:33 by fmoulin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 #include <cstdlib>
 #include <cctype>
 #include <climits>
+#include <ctime>
+#include <algorithm>
+#include <cerrno>
 
 class PmergeMe
 {
@@ -35,16 +38,20 @@ public:
     PmergeMe(const PmergeMe &cpy);
     PmergeMe &operator =(const PmergeMe &src);
     ~PmergeMe();
-
+	
+	
     /* ---------------------------- VECTOR VERSION ---------------------------- */
     void                                    vParseInput(int argc, char **argv);
     void                                    vMakePairs(std::vector<int> &chain, std::vector<std::pair<int, int> > &pairChain);
     void                                    vMakeChains(std::vector<std::pair<int, int> > &pairContainer, std::vector<int> &chainA, std::vector<int> &chainB);
     void                                    vInsertInt(std::vector<int> &chainA, std::vector<int> &chainB);
     std::vector<int>                        vRecursiveSort(std::vector<int> &chain);
-
+	
     std::vector<int>                        getVOriginal() const;
-
+	
+	std::vector<int>						vJacobsthal(std::vector<int> &chain);
+	std::vector<size_t>						vInsertionOrder(std::vector<int> &suite, std::vector<int> &chain);
+	
     /* ---------------------------- DEQUE VERSION ---------------------------- */
     void                                    dParseInput(int argc, char **argv);
     void                                    dMakePairs(std::deque<int> &chain, std::deque<std::pair<int, int> > &pairChain);
@@ -52,7 +59,10 @@ public:
     void                                    dInsertInt(std::deque<int> &chainA, std::deque<int> &chainB);
     std::deque<int>                         dRecursiveSort(std::deque<int> &chain);
 
-    std::deque<int>                        getDOriginal() const;
+    std::deque<int>                        	getDOriginal() const;
+
+	std::deque<int>							dJacobsthal(std::deque<int> &chain);
+	std::deque<size_t>						dInsertionOrder(std::deque<int> &suite, std::deque<int> &chain);
 };
 
 #endif
