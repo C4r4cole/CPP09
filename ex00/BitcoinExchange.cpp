@@ -57,13 +57,23 @@ float   BitcoinExchange::findExchangeRate(const std::string &date) const
 
 void    BitcoinExchange::validateDate(const std::string &date) const
 {
+	std::string	yearString;
+    int			year;
     std::string monthString;
     int         month;
     std::string dayString;
     int         day;
-    size_t      pos;
-    std::string datePartKept;
+	bool		isLeap;
+    int			maxDay;
     
+	yearString = date.substr(0, 4);
+	monthString = date.substr(5, 2);
+	dayString = date.substr(8, 2);
+	year = atoi(yearString.c_str());
+	month = atoi(monthString.c_str());
+	day = atoi(dayString.c_str());
+	isLeap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+
     if (date.empty())
         throw BitcoinExchange::BadInput();
     if (date.size() != 10)
@@ -71,19 +81,29 @@ void    BitcoinExchange::validateDate(const std::string &date) const
     if (date[4] != '-')
         throw BitcoinExchange::BadInput();
     if (date[7] != '-')
-        throw BitcoinExchange::BadInput();
-        
-    pos = date.find('-');
-    datePartKept = date.substr(pos + 1);
-    pos = datePartKept.find('-');
-    monthString = datePartKept.substr(0, pos);
-    dayString = datePartKept.substr(pos + 1);
-    month = atoi(monthString.c_str());
-    day = atoi(dayString.c_str());
-    
+    	throw BitcoinExchange::BadInput();
+
     if (month < 1 || month > 12)
         throw BitcoinExchange::BadInput();
     if (day < 1 || day > 31)
+        throw BitcoinExchange::BadInput();
+
+    switch (month) {
+        case 2:
+            maxDay = isLeap ? 29 : 28;
+            break;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            maxDay = 30;
+            break;
+        default:
+            maxDay = 31;
+            break;
+    }
+
+    if (day > maxDay)
         throw BitcoinExchange::BadInput();
     for (int i = 0; i < 10; i++)
     {

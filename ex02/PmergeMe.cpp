@@ -112,21 +112,15 @@ void    PmergeMe::vInsertInt(std::vector<int> &chainA, std::vector<int> &chainB)
 
 	suite = vJacobsthal(chainB);
 	order = vInsertionOrder(suite, chainB);
-    for (std::vector<size_t>::iterator it1 = order.begin(); it1 != order.end(); ++it1)
+    for (std::vector<size_t>::iterator it = order.begin(); it != order.end(); ++it)
     {
-        bool    inserted = false;
-        
-        for (std::vector<int>::iterator it2 = chainA.begin(); it2 != chainA.end(); ++it2)
-        {
-            if (*it2 > chainB[*it1])
-            {
-                chainA.insert(it2, chainB[*it1]);
-                inserted = true;
-                break ;
-            }
-        }
-        if (!inserted)
-            chainA.push_back(chainB[*it1]);
+		int value = chainB[*it];
+
+		std::vector<int>::iterator	pos;
+
+		pos = std::lower_bound(chainA.begin(), chainA.end(), value);
+
+		chainA.insert(pos, value);
     }
 }
 
@@ -281,21 +275,15 @@ void    PmergeMe::dInsertInt(std::deque<int> &chainA, std::deque<int> &chainB)
 	suite = dJacobsthal(chainB);
 	order = dInsertionOrder(suite, chainB);
 	
-    for (std::deque<size_t>::iterator it1 = order.begin(); it1 != order.end(); ++it1)
+    for (std::deque<size_t>::iterator it = order.begin(); it != order.end(); ++it)
     {
-        bool    inserted = false;
-        
-        for (std::deque<int>::iterator it2 = chainA.begin(); it2 != chainA.end(); ++it2)
-        {
-            if (*it2 > chainB[*it1])
-            {
-                chainA.insert(it2, chainB[*it1]);
-                inserted = true;
-                break ;
-            }
-        }
-        if (!inserted)
-            chainA.push_back(chainB[*it1]);
+		int value = chainB[*it];
+
+		std::deque<int>::iterator	pos;
+
+		pos = std::lower_bound(chainA.begin(), chainA.end(), value);
+
+		chainA.insert(pos, value);
     }
 }
 
