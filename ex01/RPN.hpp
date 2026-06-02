@@ -15,12 +15,13 @@
 
 #include <iostream>
 #include <stack>
+#include <list>
 #include <cstdlib>
 
 class RPN
 {
 private:
-    std::stack<int> _stack;
+    std::stack<int, std::list<int> > _stack;
     int             _result;
 
     void    pushOrCalculate(std::string &element);
